@@ -13,7 +13,7 @@ Route::get('/', function () {
 
 Route::get('/dashboard', function () {
     return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth', 'verified','user'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -22,16 +22,23 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+//Admin Route
+Route::middleware(['auth','admin'])->group(function () {
+    Route::controller(AdminController::class)->group(function () {
+        Route::get('admin/dashboard', 'AdminDashboard')->name('admin.dashboard');
+    });
+});
+//End admin Route
 
 
-Route::controller(AdminController::class)->group(function () {
-    Route::get('admin/dashboard', 'AdminDashboard')->name('admin.dashboard');
+//Manager Route
+Route::middleware(['auth','manager'])->group(function () {
+    Route::controller(ManagerController::class)->group(function () {
+        Route::get('manager/dashboard', 'ManagerDashboard')->name('manager.dashboard');
+    });
 });
 
-
-Route::controller(ManagerController::class)->group(function () {
-    Route::get('manager/dashboard', 'ManagerDashboard')->name('manager.dashboard');
-});
+//End Manager Route
 
 
 
