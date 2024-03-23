@@ -2,6 +2,10 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ManagerController;
+use App\Http\Controllers\UserController;
+use Illuminate\Database\Capsule\Manager;
 
 Route::get('/', function () {
     return view('welcome');
@@ -18,3 +22,16 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+
+Route::controller(AdminController::class)->group(function () {
+    Route::get('admin/dashboard', 'AdminDashboard')->name('admin.dashboard');
+});
+
+
+Route::controller(ManagerController::class)->group(function () {
+    Route::get('manager/dashboard', 'ManagerDashboard')->name('manager.dashboard');
+});
+
+
+
